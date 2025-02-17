@@ -13,9 +13,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
+  // Notifier для обновления QR и Profile страниц (если потребуется)
   final ValueNotifier<int> refreshNotifier = ValueNotifier<int>(0);
+  // GlobalKey для страницы списка учеников
+  final GlobalKey<ClassUsersPageState> _classUsersPageKey = GlobalKey<ClassUsersPageState>();
 
   final List<String> _titles = const [
+    'QR Код',
     'Ученики',
     'Профиль',
   ];
@@ -26,14 +30,20 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pages = [
-      const ClassUsersPage(),
+      ClassUsersPage(key: _classUsersPageKey),
       ProfilePage(refreshNotifier: refreshNotifier),
     ];
   }
 
   void _onRefreshPressed() {
-    // Обновляем данные для страниц, подписанных на refreshNotifier (QR и Profile)
-    refreshNotifier.value++;
+    if (_currentIndex == 0) {
+      // Обновляем список учеников, если открыта соответствующая вкладка
+      _classUsersPageKey.currentState?.refresh();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Обновление доступно только на странице "Ученики".')),
+      );
+    }
   }
 
   @override

@@ -7,14 +7,14 @@ class ClassUsersPage extends StatefulWidget {
   const ClassUsersPage({Key? key}) : super(key: key);
 
   @override
-  _ClassUsersPageState createState() => _ClassUsersPageState();
+  ClassUsersPageState createState() => ClassUsersPageState();
 }
 
-class _ClassUsersPageState extends State<ClassUsersPage> {
+class ClassUsersPageState extends State<ClassUsersPage> {
   bool isLoading = false;
   String? errorMessage;
   List<dynamic> users = [];
-  int? timestamp; // Текущая метка времени, полученная от сервера
+  int? timestamp; // текущая метка времени, полученная от сервера
 
   @override
   void initState() {
@@ -61,8 +61,12 @@ class _ClassUsersPageState extends State<ClassUsersPage> {
     }
   }
 
+  /// Публичный метод для обновления списка учеников
+  Future<void> refresh() async {
+    await _loadClassUsers();
+  }
+
   String _formatTimestamp(int ts) {
-    // Преобразуем метку времени (секунды) в форматированную дату
     final date = DateTime.fromMillisecondsSinceEpoch(ts * 1000);
     return "${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year} ${date.hour}:${date.minute}";
   }
@@ -74,10 +78,7 @@ class _ClassUsersPageState extends State<ClassUsersPage> {
     }
     if (errorMessage != null) {
       return Center(
-        child: Text(
-          errorMessage!,
-          style: const TextStyle(color: Colors.red),
-        ),
+        child: Text(errorMessage!, style: const TextStyle(color: Colors.red)),
       );
     }
     if (users.isEmpty) {
@@ -87,9 +88,8 @@ class _ClassUsersPageState extends State<ClassUsersPage> {
     return RefreshIndicator(
       onRefresh: _loadClassUsers,
       child: ListView.builder(
-        itemCount: users.length + 1, // +1 для отображения timestamp в начале списка
+        itemCount: users.length + 1, // +1 для отображения timestamp
         itemBuilder: (context, index) {
-          // Если индекс 0, отображаем метку времени
           if (index == 0) {
             return Padding(
               padding: const EdgeInsets.all(12.0),
@@ -101,7 +101,6 @@ class _ClassUsersPageState extends State<ClassUsersPage> {
               ),
             );
           }
-
           final user = users[index - 1] as Map<String, dynamic>;
           return Card(
             margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
