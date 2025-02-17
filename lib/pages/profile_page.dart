@@ -148,9 +148,6 @@ class _ProfilePageState extends State<ProfilePage> {
           Text("Логин: ${userData?['username'] ?? ''}"),
           Text("Класс: ${userData?['class'] ?? ''}"),
           Text("ID класса: ${userData?['class_id'] ?? ''}"),
-          Text("QR: ${userData?['qr'] ?? ''}"),
-          Text("Использован: ${userData?['used'] == true ? 'Да' : 'Нет'}"),
-          Text("В здании: ${userData?['in_building'] == true ? 'Да' : 'Нет'}"),
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: _logout,

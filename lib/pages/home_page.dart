@@ -16,7 +16,6 @@ class _HomePageState extends State<HomePage> {
   final ValueNotifier<int> refreshNotifier = ValueNotifier<int>(0);
 
   final List<String> _titles = const [
-    'QR Код',
     'Ученики',
     'Профиль',
   ];
@@ -27,7 +26,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pages = [
-      QRPage(refreshNotifier: refreshNotifier),
       const ClassUsersPage(),
       ProfilePage(refreshNotifier: refreshNotifier),
     ];
@@ -62,7 +60,6 @@ class _HomePageState extends State<HomePage> {
           });
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.qr_code), label: 'QR'),
           BottomNavigationBarItem(icon: Icon(Icons.group), label: 'Ученики'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Профиль'),
         ],
